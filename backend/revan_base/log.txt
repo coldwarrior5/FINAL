@@ -1,0 +1,53 @@
+[ 01/13/2015 5:16 ] deploy
+[ 01/13/2015 5:34 ] base deploy
+[ 01/13/2015 5:35 ] generate model registriranikorisnik korisnickoIme:text lozinka:text ime:text prezime:text
+[ 01/13/2015 5:43 ] generate model registriranikorisnik korisnickoIme:text lozinka:text ime:text prezime:text
+[ 01/13/2015 5:43 ] base deploy
+[ 01/13/2015 5:44 ] generate model registriranikorisnik korisnickoIme:text lozinka:text ime:text prezime:text
+[ 01/13/2015 5:45 ] base deploy
+[ 01/13/2015 5:45 ] generate model registriranikorisnik korisnickoIme:text lozinka:text ime:text prezime:text
+[ 01/13/2015 5:51 ] generate model prijavljenikorisnik idRegistriraniKorisnik:int oib:text datumRodenja:datetime adresa:text email:varchar telefon:text brojKartice:text idPopusta:int
+[ 01/13/2015 5:52 ] generate model administrator idRegistriraniKorisnik:int
+[ 01/13/2015 5:54 ] generate model rezervacija idKorisnik:int od:datetime do:datetime vrijemeRezervacije:datetime idMjesta:int naplata:datetime
+[ 01/13/2015 5:55 ] generate model parkirnomjesto idParkiralista:int stanje:int rezervirano:int
+[ 01/13/2015 5:57 ] generate model parkiraliste naziv:text adresa:text zemljopisnaSirina:varchar zemljopisnaDuzina:varchar brojMjesta:int brojSlobodnihMjesta:int idTip:int idCijena:int
+[ 01/13/2015 5:58 ] generate model cjenik cijena:varchar idAdmin:int opis:text
+[ 01/13/2015 5:59 ] generate model popust iznos:int idAdmin:int
+[ 01/13/2015 6:00 ] generate model ureduje idCijena:int idAdmin:int
+[ 01/13/2015 6:00 ] generate model prilagodava idPopust:int idAdmin:int
+[ 01/13/2015 6:46 ] base deploy
+[ 01/13/2015 6:48 ] generate fullcontroller user_controller
+[ 01/13/2015 6:58 ] generate fullquery username password name surname oib date address email telephone card
+[ 01/13/2015 6:58 ] generate fullquery register username password name surname oib date address email telephone card
+[ 01/13/2015 7:27 ] generate fullquery login username password
+[ 01/13/2015 7:53 ] generate fullquery getAllParkings void
+[ 01/13/2015 8:14 ] generate fullcontroller parking
+[ 01/14/2015 6:02 ] generate model parkirnomjesto idParkiralista:int idKorisnik:int od:datetime do:datetime
+[ 01/14/2015 7:42 ] generate fullquery addParking name address latitude longitude spots type price
+[ 01/14/2015 7:57 ] generate fullquery editParking name address latitude longitude spots type price id
+[ 01/14/2015 8:02 ] generate fullquery removeParking id
+[ 01/14/2015 8:12 ] generate fullquery editUsernamePassword id username password
+[ 01/14/2015 8:21 ] removefrommodel popust idAdmin
+[ 01/14/2015 8:23 ] generate fullquery getDiscount void
+[ 01/14/2015 8:23 ] generate fullcontroller discount
+[ 01/14/2015 8:24 ] generate fullquery getDiscount void
+[ 01/14/2015 8:26 ] generate fullquery editDiscount percent
+[ 01/14/2015 8:33 ] generate model parkingtype name:text
+[ 01/14/2015 8:35 ] generate fullcontroller getParkingTypes void
+[ 01/14/2015 8:36 ] generate fullquery getParkingTypes void
+[ 01/14/2015 8:38 ] generate model tipparking name:text
+[ 01/14/2015 8:52 ] generate model banka kartica:varchar iznos:varchar
+[ 01/14/2015 8:54 ] generate fullcontroller bank
+[ 01/14/2015 9:04 ] generate fullquery addMoney card money
+[ 01/14/2015 9:20 ] generate fullcontroller sensor
+[ 01/14/2015 9:30 ] generate fullquery sensorToggleOn parking sensor time
+[ 01/14/2015 9:30 ] generate fullquery sensorToggleOff parking sensor time
+[ 01/14/2015 10:05 ] generate fullquery editUserInfo id name surname oib date address email phone card
+[ 01/14/2015 10:17 ] generate fullquery monthlyPay void
+[ 01/14/2015 10:58 ] generate fullquery removeSubscription id
+[ 01/14/2015 11:28 ] generate fullquery getSubscriptions id
+[ 01/14/2015 11:33 ] generate fullquery getReservations id
+[ 01/14/2015 11:50 ] generate fullquery getAllUsers void
+[ 01/15/2015 12:14 ] generate fullquery insertReservation parking user from to
+[ 01/15/2015 2:36 ] generate fullquery getParkingInfo id
+[ 01/15/2015 3:08 ] generate fullquery getUserInfo id
