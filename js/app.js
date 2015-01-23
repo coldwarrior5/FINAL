@@ -47,25 +47,36 @@ app.controller('Peek',function($scope, $window, $http, $log, promiseTracker, $ti
 	
     $scope.submit = function(form) {
       // Trigger validation flag.
-      $scope.submitted = true;
-     var dateUser = $('#datepicker_single').val();
+      switch(form.$name){
+          case "single" :
+      
+      $scope.submitted_single = true;
+      
+      if (form.$invalid) {
+        return;
+      }
+      var od_single = (parseInt($('#od_single').val(),10)-1) * 3600;
+      var do_single = (parseInt($('#dox_single').val(),10)-1) * 3600;
+      var dateUser = $('#datepicker_single').val();
      //If form is invalid, return and let AngularJS show validation errors.
-     
       dateUser=reverse(dateUser);
-      
+      var now = (new Date().getTime())/1000;
+      var vor = 6 * 3600;
+      now=now + vor;
       var time = (new Date(dateUser).getTime())/1000;
-      var od_single = $('#od_single').val() * 3600;
-	  var do_single = $('#dox_single').val() * 3600;
       
-	
-	  
+	  var userId = $('#hidden_single').val();
+	  var parkingId = $('#parking_single').val();
 	  var total_od = time + od_single;
 	  var total_do = time + do_single;
 	 
-	  var userId = $('#hidden_single').val();
-	  var parkingId = $('#parking_single').val();
-	  
-	  
+	  if(total_od < now){
+              $scope.messages_single = "Rezervacija mora biti izvršena minimalno 6 sati unaprijed";
+              $timeout(function() {
+            $scope.messages_single = null;
+          }, 3000);
+          break;
+          }
 	
 	var config = {
         params : {
@@ -81,35 +92,167 @@ app.controller('Peek',function($scope, $window, $http, $log, promiseTracker, $ti
 	      // Perform JSONP request.
       var $promise = $http.jsonp('backend/app/QUERY/insertReservation.php', config)
         .success(function(data, status, headers, config) {
-			console.log('spremljeno :)');
+            if (data.result === "USPJEH") {
+            $('#datepicker_single').datepicker("update","");
+            $scope.messages_single = 'Rezervacija je uspješno izvršena!';
+            $scope.submitted = false;
+          } else {
+            $scope.messages_single = data.description;
+            $log.error(data);
+          }
         })
         .error(function(data, status, headers, config) {
           $scope.progress = data;
-          $scope.messages_login = 'Došlo je do mrežne pogreške. Pokušajte ponovo kasnije.';
+          $scope.messages_single = 'Došlo je do mrežne pogreške. Pokušajte ponovo kasnije.';
           $log.error(data);
         })
         .finally(function() {
           // Hide status messages after three seconds.
           $timeout(function() {
-            $scope.messages_login = null;
+            $scope.messages_single = null;
           }, 3000);
         });
-	
-	
-	
-	
-	
+       break;
+            case "rep" :
+        
+
+            $scope.submitted_rep = true;
+
+            if (form.$invalid) {
+              return;
+            }
+           var od_rep = (parseInt($('#od_rep').val(),10)-1) * 3600;
+           var do_rep = (parseInt($('#dox_rep').val(),10)-1) * 3600;
+           var dateUser = $('#datepicker_rep').val();
+            var now = (new Date().getTime())/1000;
+            var vor = 6 * 3600;
+            now=now + vor;
+           var allDates = dateUser.split(",");
+           var month = checkDates(allDates);
+           if(month===0){
+               $scope.messages_rep = "U svakom tijednu treba biti barem jedna rezervacija!";
+           }
+           else if(month===-1){
+               $scope.messages_rep = "Sve rezervacije trebaju biti unutar 30 dana!";
+           }
+           //If form is invalid, return and let AngularJS show validation errors.
+           else if(month===1){
+           for(var i=0;i<allDates.length;i++){
+                dateUser=reverse(allDates[i]);
+                var time = (new Date(dateUser).getTime())/1000;
+                
+
+                var userId = $('#hidden_rep').val();
+                var parkingId = $('#parking_rep').val();
+                var total_od = time + od_rep;
+                var total_do = time + do_rep;
+                if(total_od < now){
+                $scope.messages_rep = "Rezervacija za datum: "+ allDates[i] +" je pogrešna!";
+                continue;
+            }
+               var config = {
+              params : {
+                'callback' : 'JSON_CALLBACK',
+                'parking' : parkingId,
+                'user' : userId,
+                'from' : total_od,
+                'to' : total_do
+              }};
+          
+           // Perform JSONP request.
+            var $promise = $http.jsonp('backend/app/QUERY/insertReservation.php', config)
+              .success(function(data, status, headers, config) {
+                  $('#datepicker_rep').datepicker("update","");
+                  $scope.submitted = false;
+                  if (data.result === "USPJEH") {
+                       if(typeof($scope.messages_rep) === "undefined"){
+                    $scope.messages_rep = 'Rezervacije su uspješno izvršene!';
+                }
+                else if($scope.messages_rep !== "Rezervacije su uspješno izvršene!" && $scope.messages_rep !== "Sve rezervacije trebaju biti unutar 30 dana!" && !(~$scope.messages_rep.indexOf("Rezervacije su izvršene"))){
+                    $scope.messages_rep += " Rezervacije su izvršene";
+                }
+                } else {
+                     if(typeof($scope.messages_rep) === "undefined"){
+                   $scope.messages_rep = 'Došlo je do mrežne pogreške. Pokušajte ponovo kasnije.';
+               }
+                }
+              })
+              .error(function(data, status, headers, config) {
+                  $timeout(function() {
+                  $scope.messages_rep = null;
+                }, 3000);
+              })
+                      .finally(function() {
+                // Hide status messages after three seconds.
+                $timeout(function() {
+                  $scope.messages_rep = null;
+                }, 3000);
+              }); 
+           };
+       }
+            
+              break;
+        case "perm" :
+            
+            $scope.submitted_perm = true;
+      
+            if (form.$invalid) {
+              return;
+            }
+
+           var dateUser = $('#datepicker_perm').val();
+           //If form is invalid, return and let AngularJS show validation errors.
+
+            dateUser=reverse(dateUser);
+
+            var time = (new Date(dateUser).getTime())/1000;
+
+                var total_od = time;
+                var total_do = -1;
+
+                var userId = $('#hidden_single').val();
+                var parkingId = $('#parking_single').val();
 
 
-      var config = {
-        params : {
-          'callback' : 'JSON_CALLBACK',
-          'parking' : $scope.username,
-          'password' : $scope.password          
-        }
-      };
+
+              var config = {
+              params : {
+                'callback' : 'JSON_CALLBACK',
+                'parking' : parkingId,
+                'user' : userId,
+                'from' : total_od,
+                'to' : total_do
+              }};
+
+
+
+                    // Perform JSONP request.
+            var $promise = $http.jsonp('backend/app/QUERY/insertReservation.php', config)
+              .success(function(data, status, headers, config) {
+                  if (data.result === "USPJEH") {
+                  $('#datepicker_perm').datepicker("update","");
+                  $scope.messages_perm = 'Rezervacija je uspješno izvršena!';
+                  $scope.submitted = false;
+                } else {
+                  $scope.messages_perm = data.description;
+                  $log.error(data);
+                }
+              })
+              .error(function(data, status, headers, config) {
+                $scope.progress = data;
+                $scope.messages_perm = 'Došlo je do mrežne pogreške. Pokušajte ponovo kasnije.';
+                $log.error(data);
+              })
+              .finally(function() {
+                // Hide status messages after three seconds.
+                $timeout(function() {
+                  $scope.messages_perm = null;
+                }, 3000);
+              });
+             break;
+            
   };
-    
+    };
 });
 app.controller('login', function ($scope, $window, $http, $log, promiseTracker, $timeout){
     $scope.subjectListOptions = {
@@ -189,12 +332,28 @@ app.controller('register', function ($scope, $window, $http, $log, promiseTracke
       'other': 'Other'
     };
     
-
     // Inititate the promise tracker to track form submissions.
     $scope.progress = promiseTracker();
     $scope.showPassword=false;
     var len;
     var passwords =false;
+    
+    function validateBirthdate(){
+        if($('#datepicker').val() === "undefined" || $('#datepicker').val() === ""){
+        $scope.showError = "true";
+    }
+    else{
+        $scope.showError="false";
+    }
+    };
+    
+    $scope.editBirthdate = function(){
+        
+        if($scope.showError === "true" && !($('#datepicker').val() === "undefined" || $('#datepicker').val() === "")){
+            $scope.showError = "false";
+        }
+    };
+    
     $scope.validate = function () {
         var unicodeWord = XRegExp("(?=^.{6,30}$)((?=.*\\d)|(?=.*\\W))(?![.\\n])(?=.*\\p{Lu})(?=.*\\p{Ll})");
                 len = $scope.passwordRegister;
@@ -235,18 +394,23 @@ app.controller('register', function ($scope, $window, $http, $log, promiseTracke
     $scope.submit = function(form) {
       // Trigger validation flag.
       $scope.submitted = true;
+      //validateBirthdate();
+      if (form.$invalid) {
+        return;
+      }
       var dateUser = $('#datepicker').val();
      //If form is invalid, return and let AngularJS show validation errors.
       dateUser=reverse(dateUser);
       
       var time = (new Date(dateUser).getTime())/1000;
       // Default values for the request.
+      var change = false;
       var config = {
         params : {
           'callback' : 'JSON_CALLBACK',
           'name' : $scope.nameUser,
           'surname' : $scope.surnameUser,
-          'username' : $scope.username,
+          'username' : $scope.usernameRegister,
           'email' : $scope.email,
           'password' : $scope.passwordRegister2 ,
           'oib' : $scope.OIB,
@@ -259,15 +423,18 @@ app.controller('register', function ($scope, $window, $http, $log, promiseTracke
       // Perform JSONP request.
       var $promise = $http.jsonp('backend/app/QUERY/register.php', config)
         .success(function(data, status, headers, config) {
-          if (typeof data.result === "undefined") {
+          if (data.result === "USPJEH") {
             $scope.nameUser = null;
             $scope.surnameUser = null;
-            $scope.username = null;
-            $scope.password = null;
+            $scope.usernameRegister = null;
+            $scope.email = null;
+            $scope.passwordRegister = null;
+            $scope.passwordRegister2 = null;
             $scope.OIB = null;
             $scope.Address = null;
             $scope.telephone = null;
             $scope.Credit = null;
+            $('#datepicker').datepicker("update","");
             $scope.messages_register = 'Registracija je uspješno izvršena!';
             $scope.submitted = false;
           } else {
@@ -283,12 +450,14 @@ app.controller('register', function ($scope, $window, $http, $log, promiseTracke
         .finally(function() {
           // Hide status messages after three seconds.
           $timeout(function() {
-              if($scope.messages_register === "Resgistracija je uspješno izvršena!"){
-                $scope.messages_register = null;
+              
+            if($scope.messages_register === "Registracija je uspješno izvršena!"){
                 $('#registerModal').modal('hide');
+          $('#loginModal').modal('show');
             }
+            $scope.messages_register = null;
             
-          }, 3000);
+          }, 3000);     
         });
     };
 });
@@ -354,4 +523,79 @@ app.controller('help', function ($scope, $window, $http, $log, promiseTracker, $
     };
   });
 
+app.directive('datepicker', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, el, attr, ngModel) {
+        $(el).datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            startView: 2,
+            clearBtn: true,
+            language: "hr",
+            endDate: date_register});
+      $(el).datepicker().on("changeDate",function(event){
+            scope.$apply(function() {
+               ngModel.$setViewValue(event.date);//This will update the model property bound to your ng-model whenever the datepicker's date changes.
+            });
+        });
+    }
+  };
+});
 
+app.directive('datepickersingle', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, el, attr, ngModel) {
+        $(el).datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            clearBtn: true,
+            language: "hr",
+            startDate: date_1});
+      $(el).datepicker().on("changeDate",function(event){
+            scope.$apply(function() {
+               ngModel.$setViewValue(event.date);//This will update the model property bound to your ng-model whenever the datepicker's date changes.
+            });
+        });
+    }
+  };
+});
+
+app.directive('datepickerrep', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, el, attr, ngModel) {
+        $(el).datepicker({
+            format: "dd/mm/yyyy",
+            multidate: true,
+            clearBtn: true,
+            language: "hr",
+            startDate: date_1});
+      $(el).datepicker().on("changeDate",function(event){
+            scope.$apply(function() {
+               ngModel.$setViewValue(event.date);//This will update the model property bound to your ng-model whenever the datepicker's date changes.
+            });
+        });
+    }
+  };
+});
+
+app.directive('datepickerperm', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, el, attr, ngModel) {
+        $(el).datepicker({
+            format: "dd/mm/yyyy",
+            autoclose: true,
+            clearBtn: true,
+            language: "hr",
+            startDate: date_1});
+      $(el).datepicker().on("changeDate",function(event){
+            scope.$apply(function() {
+               ngModel.$setViewValue(event.date);//This will update the model property bound to your ng-model whenever the datepicker's date changes.
+            });
+        });
+    }
+  };
+});

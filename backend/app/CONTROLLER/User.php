@@ -20,6 +20,16 @@ class UserController
 {
 	public static function registerUser($username, $password, $name, $surname, $oib, $dateOfBirth, $address, $email, $phone, $card)
 	{
+                $usersMaster = Registriranikorisnik::findAll();
+                foreach($usersMaster as $element)
+		{
+                        $user = new Registriranikorisnik();
+                        $user = $element;
+			if($user->korisnickoIme === $username){
+                            Json::renderError(DatabaseError::usernameTaken());
+                        }
+			
+		}
 		Revan::validateNullOrEmpty($username, $password, $name, $surname, $oib, $dateOfBirth, $email, $phone, $card);
 		
 		$registeredUser = Registriranikorisnik::init($username, Security::wrapSha1($password), $name, $surname);
@@ -28,10 +38,10 @@ class UserController
 
 		$dob = date('Y-m-d H:i:s', $dateOfBirth);
 		
-		$user = Prijavljenikorisnik::init($registeredUser->id, $oib, $dob, $address, $email, $phone, $card, -1);
+		$user = Prijavljenikorisnik::init($registeredUser->id, $oib, $dob, $address, $email, $phone, $card, 1);
 		$user->save();
 		
-		Json::renderSuccess("User registered");
+		Json::renderSuccess("Uspješna prijava");
 	}
 	
 	public static function login($username, $password)

@@ -88,7 +88,7 @@ function initialize() {
 		});
                 google.maps.event.addListener(userMarker, "dragend", function (e) {
 			userLatLng = userMarker.getPosition();
-			calcRoute(currentlyRoutingTo_index);
+			findBestRoute();
                 });
   
 		// directions
@@ -96,15 +96,8 @@ function initialize() {
 		directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
 		directionsDisplay.setMap(map);
 		distanceMatrixService = new google.maps.DistanceMatrixService();
-		distanceMatrixService.getDistanceMatrix(
-		{
-			origins: [userLatLng],
-			destinations: latLngArray,
-			travelMode: google.maps.TravelMode.DRIVING,
-			avoidHighways: false,
-			avoidTolls: false
-		}, callback);
-        })}
+		findBestRoute();
+        });}
         else{
             document.getElementById("warnMe").className ="";
             // creating the map canvas
@@ -140,7 +133,7 @@ function initialize() {
 		});
                 google.maps.event.addListener(userMarker, "dragend", function (e) {
 			userLatLng = userMarker.getPosition();
-			calcRoute(currentlyRoutingTo_index);
+			findBestRoute();
                 });
   
 		// directions
@@ -148,14 +141,7 @@ function initialize() {
 		directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
 		directionsDisplay.setMap(map);
 		distanceMatrixService = new google.maps.DistanceMatrixService();
-		distanceMatrixService.getDistanceMatrix(
-		{
-			origins: [userLatLng],
-			destinations: latLngArray,
-			travelMode: google.maps.TravelMode.DRIVING,
-			avoidHighways: false,
-			avoidTolls: false
-		}, callback);
+		findBestRoute();
 	}
     }
 	
@@ -194,19 +180,19 @@ function addParking(newLat, newLng, title, text) {
 		latLngArray[index] = newLatLng;
 		
 		// crate infowindow
-		displayText = '<div id="content" >'+
+		displayText = '<div style="width: 250px; height: 150px;text-align:left; " id="content" >'+
 		'<div id="siteNotice" >'+
-		'</div>'+
 		'<h5 id="firstHeading" class="firstHeading" style=\"color:black\">' + title + '</h5>'+
+                '</div>'+
 		'<div id="bodyContent">'+
 		'<p style=\"color:black\">' +
 		text +
-		'<br><br>' +
+		'<br/>' +
 		'</p>'+
-		'<button style=\"color:black\" type="button" onClick="calcRoute(' + index + ')">Odaberi</button>' +
+		'<button style="color:black; position: absolute; bottom: 0;" type="button" onClick="calcRoute(' + index + ')">Odaberi</button>' +
 		'</div>'+
 		'</div>';
-	  
+                
 		var infowindow = new google.maps.InfoWindow({
 			content: displayText
 		});
@@ -229,6 +215,16 @@ function calcRoute(index) {
 		});
 	}
 	
+function findBestRoute(){
+        distanceMatrixService.getDistanceMatrix(
+        {
+                origins: [userLatLng],
+                destinations: latLngArray,
+                travelMode: google.maps.TravelMode.DRIVING,
+                avoidHighways: false,
+                avoidTolls: false
+        }, callback);
+}
 function callback(response, status) {
 		if (status === google.maps.DistanceMatrixStatus.OK) {
 			var origins = response.originAddresses;

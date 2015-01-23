@@ -228,16 +228,11 @@ class ParkingController
 		foreach($parkingFilter as $element)
 		{
 			$parking = new Parkirnomjesto;
-			$parking = $element;
-			
-			if($parking->do != '0000-00-00 00:00:00')
-			{
-				if(strtotime($parking->do) > time())
-				{
-					array_push($returnArray, $parking);
-				}
+			$parking = $element;	
 				
-			}
+                        $park = Parkiraliste::find($parking->idParkiralista);
+                        $parking->idParkiralista = $park->naziv;
+                        array_push($returnArray, $parking);
 		}
 		
 		Json::renderArray($returnArray);
@@ -259,7 +254,13 @@ class ParkingController
 		else
 		{
 			//cijena i popust
-			$discountObject = Popust::find(1);
+                        $ret= $user->idPopusta;
+                        if($ret == "-1"){
+                            $discount=0;
+                        }
+                        else{
+                            $discountObject = Popust::find($ret);
+                        }
 			$discount = $discountObject->iznos;
 				
 			$parking = Parkiraliste::find($parkingId);

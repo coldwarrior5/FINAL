@@ -10,77 +10,80 @@ class Json
 	{
 		if($error < 0)
 		{
-			$return = "Unknown Error Occured";
+			$return = "Nepoznata greska";
 			switch ($error)
 			{
 				case "-1":
-					$return = "Passwords do not match";
+					$return = "Lozinka nije odgovarajuća";
 					break;
 				case "-2":
-					$return = "Email exists!";
+					$return = "Email postoji!";
 					break;
 				case "-3":
-					$return = "Wrong email format";
+					$return = "Krivi email format";
 					break;
 				case "-4":
-					$return = "Empty fields";
+					$return = "Imate prazna polja";
 					break;
 				case "-5":
-					$return = "Authentication error occured";
+					$return = "Greška prilikom autentifikacije";
 					break;
 				case "-7":
-					$return = "Invalid url";
+					$return = "Neispravan url";
 					break;
 				case "-8":
-					$return = "Authorization error";
+					$return = "Greska autorizacije";
 					break;
 				case "-10":
-					$return = "No token";
+					$return = "Nema tokena";
 					break;
 				case "-11":
-					$return = "Invalid token";
+					$return = "Pogrešan token";
 					break;
 				case "-12":
-					$return = "Variable must contain only letters";
+					$return = "Varijabla mora sadržavati samo slova";
 					break;
 				case "-13":
-					$return = "Database error - element not inserted";
+					$return = "Greška u bazi - element nije unesen";
 					break;
 				case "-14":
-					$return = "Empty result";
+					$return = "Prazan rezultat";
 					break;
 				case "-15":
-					$return = "Record does not exist";
+					$return = "Taj korisnik ne postoji";
 					break;
 				case "-16":
-					$return = "Remove Failure";
+					$return = "Uklonite grešku";
 					break;
 				case "-17":
-					$return = "Expected number";
+					$return = "Broj je očekivan";
 					break;
 				case "-19":
-					$return = "Expired";
+					$return = "Isteklo";
 					break;
 				case "-18":
-					$return = "Token exists";
+					$return = "Token postoji";
 					break;
 				case "-20":
-					$return = "Database error occured";
+					$return = "Greška u bazi podataka";
 					break;
 				case "-21":
-					$return = "Time error occured";
+					$return = "Greška u vremenu";
 					break;
 				case "-22":
-					$return = "URL error occured";
+					$return = "URL greška";
+					break;
+                                case "-24":
+					$return = "Korisničko ime već postoji";
 					break;
 				case "-99":
-					$return = "Error occured";
+					$return = "Greška";
 					break;
 			}
 			
 			
 			$errorArray = array();
-			$errorArray['result'] = "ERROR";
+			$errorArray['result'] = "GRESKA";
 			$errorArray['code'] = $error;
 			$errorArray['description'] = $return;
 			
@@ -114,7 +117,7 @@ class Json
 	static function renderSuccess($message)
 	{
 		$successArray = array();
-		$successArray['result'] = "SUCCESS";
+		$successArray['result'] = "USPJEH";
 		$successArr['code'] = "200";
 		$successArray['description'] = $message;
 			

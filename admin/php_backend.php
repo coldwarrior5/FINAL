@@ -1,6 +1,9 @@
 <?php
 
+        //this needs to be changed on real server
 	$backendUrl = 'http://127.0.0.1/FINAL/backend/app/QUERY/';
+        //$backendUrl = 'http://www.network-issues.com/backend/app/QUERY/';
+        
 
 	function backendCall($url, $asociativeArray)
 	{

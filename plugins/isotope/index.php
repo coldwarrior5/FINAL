@@ -57,7 +57,7 @@
         <script src="js/mapScript.js"></script>
         
         <!-- Angluar.js -->
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
         <script type="text/javascript" src="js/promise-tracker.js"></script>
         <script type="text/javascript" src="plugins/jquery.min.js"></script>
         
@@ -75,9 +75,6 @@
          <!-- Datepicker croatian -->
          <script src="js/locales/bootstrap-datepicker.hr.js" charset="UTF-8"></script>
         
-         <!-- Chained javascript -->
-         <script type="text/javascript" src="plugins/jquery.chained.min.js"></script>
-         
         <!-- reCaptcha javascript -->
         <script type="text/javascript">
             var userId = '<?php echo $UserId; ?>';
@@ -87,8 +84,6 @@
             };
             var widgetId;
             var onloadCallback = function() {
-                $("#dox_single").chained("#od_single");
-                $("#dox_rep").chained("#od_rep");
                 // Renders the HTML element with id 'example1' as a reCAPTCHA widget.
                 // The id of the reCAPTCHA widget is assigned to 'widgetId1'.
                 widgetId=grecaptcha.render('example1', {
@@ -101,7 +96,7 @@
             function resetCaptcha(){
                 angular.element(document.querySelectorAll('.pls-container')).remove();
                 grecaptcha.reset(widgetId); 
-            }
+            };
         </script>
         <!-- User location -->
         <script>
@@ -303,10 +298,10 @@
                                         <input type="text" class="form-control" id="usernameRegister" placeholder="Korisničko ime" name="usernameRegister" data-ng-model="usernameRegister" required>
                                         <i class="fa fa-user form-control-feedback"></i>
                                 </div>
-                                <div class="alert alert-danger" data-ng-show="submitted && registerForm.usernameRegister.$error.required">Potrebno je  korisničko ime!</div>
+                                <div class="alert alert-danger" data-ng-show="submitted && registerForm.username.$error.required">Potrebno je  korisničko ime!</div>
                                 <div class="form-group has-feedback">
                                         <label class="sr-only" for="email">Email address</label>
-                                        <input type="email" class="form-control" id="email" d placeholder="Email adresa" name="email" data-ng-model="email" required>
+                                        <input type="email" class="form-control" id="email" placeholder="Email adresa" name="email" data-ng-model="email" required>
                                         <i class="fa fa-envelope form-control-feedback"></i>
                                 </div>
                                 <div class="alert alert-danger" data-ng-show="submitted && registerForm.email.$error.required">Email adresa potrebna!</div>
@@ -325,7 +320,7 @@
                                 <div class="alert alert-danger" data-ng-show="submitted && registerForm.passwordRegister2.$error.required">Lozinke se ne poklapaju!</div>
                                 <div class="form-group has-feedback">
                                         <label class="sr-only" for="OIB">OIB</label>
-                                        <input type="text" minlenght="11" maxlength="11" class="form-control" id="OIB" placeholder="OIB" name="OIB" data-ng-model="OIB" required>
+                                        <input type="text" maxlength="11"   class="form-control" id="OIB" placeholder="OIB" name="OIB" data-ng-model="OIB" required>
                                         <i class="fa fa-male form-control-feedback"></i>
                                 </div>
                                 <div class="alert alert-danger" data-ng-show="submitted && registerForm.OIB.$error.required">OIB je potreban</div>
@@ -337,16 +332,17 @@
                                             $(document).ready(function () {
                                                 $("#datepicker").datepicker({
                                                         format: "dd/mm/yyyy",
-                                                        autoclose: true,
                                                         startView: 2,
                                                         clearBtn: true,
                                                         language: "hr",
                                                         endDate: date_register
                                                     }
-                                                );
+                                                ).on('changeDate', function(e){
+                                                    $(this).datepicker('hide');
+                                                });
                                             });
                                         </script>
-                                        <input type = "text" id = "datepicker" datepicker="" class="form-control" placeholder="Datum rođenja" name="datepicker" data-ng-model="datepicker" required/>
+                                        <input type = "text" id = "datepicker" datepicker class="form-control" placeholder="Datum rođenja" name="datepicker" data-ng-model="datepicker" required/>
                                     <i class="fa fa-calendar form-control-feedback"></i>
                                 </div>
                                 <div class="alert alert-danger" data-ng-show="submitted && registerForm.datepicker.$error.required">Datum rođenja je potreban!</div>
@@ -358,13 +354,13 @@
                                 <div class="alert alert-danger" data-ng-show="submitted && registerForm.Address.$error.required">Adresa je potrebna!</div>
                                 <div class="form-group has-feedback">
                                         <label class="sr-only" for="telephone">Telefon</label>
-                                        <input type="text" minlenght="7" maxlength="16"   class="form-control" id="telephone" placeholder="Telefonski broj" name="telephone" data-ng-model="telephone" required>
+                                        <input type="text" maxlength="16"   class="form-control" id="telephone" placeholder="Telefonski broj" name="telephone" data-ng-model="telephone" required>
                                         <i class="fa fa-credit-card form-control-feedback"></i>
                                 </div>
                                 <div class="alert alert-danger" data-ng-show="submitted && registerForm.telephone.$error.required">Broj telefona je potreban</div>
                                 <div class="form-group has-feedback">
                                         <label class="sr-only" for="Credit">Kartica</label>
-                                        <input type="text" minlenght="16" maxlength="16"   class="form-control" id="Credit" placeholder="Broj kreditne kartice" name="Credit" data-ng-model="Credit" required>
+                                        <input type="text" maxlength="16"   class="form-control" id="Credit" placeholder="Broj kreditne kartice" name="Credit" data-ng-model="Credit" required>
                                         <i class="fa fa-credit-card form-control-feedback"></i>
                                 </div>
                                 <div class="alert alert-danger" data-ng-show="submitted && registerForm.Credit.$error.required">Kreditna kartica je potrebna</div>
@@ -375,7 +371,7 @@
                           <div class="row">
                               <div class="col-xs-12">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
-                                    <button type="button" class="btn btn-primary"  data-ng-hide="registerForm.$invalid" data-ng-click="submit(registerForm)">Registriraj se</button>
+                                    <button type="button" class="btn btn-primary" data-ng-click="submit(registerForm)">Registriraj se</button>
                               </div>
                           </div>
                       </div>
@@ -701,30 +697,6 @@
                                             <div class="row">
                                                     <div class="col-md-6">
                                                            <h2>Vaše postojeće rezervacije</h2>
-                                                           <table class="table bootstrap-datatable datatable dataTable" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" border="0">
-						  <tr class="table_legend">
-                          <td class=" sorting_1">Naziv parkirališta</td>
-								<td class="center ">Vrijeme početka</td><td class="center ">Vrijeme kraja</td>
-                          </tr>
-						  
-					  <tbody role="alert" aria-live="polite" aria-relevant="all">
-                      
-                       <?php 
-					
-						$backend = backendCall('getReservations', array('id' => $UserId));
-						
-						foreach($backend as $element)
-						{
-					?>
-                      <tr class="even" style="border: none important;">
-								<td class="center "><?php echo $element['idParkiralista'];?></td>
-								<td class="center "><?php echo $element["od"]; ?></td>
-                                                                <td class="center "><?php $var = ($element["do"]==="0000-00-00 00:00:00") ? "Trajna" : $element["do"]; echo $var; ?></td>
-	
-							</tr>
-                            <?php } ?>
-                            
-                            </tbody></table>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <h2>Rezervirajte novo mjesto</h2>
@@ -749,23 +721,25 @@
                                                                                                         $(document).ready(function () {
                                                                                                             $("#datepicker_single").datepicker({
                                                                                                                     format: "dd/mm/yyyy",
-                                                                                                                    autoclose: true,
                                                                                                                     clearBtn: true,
                                                                                                                     language: "hr",
                                                                                                                     startDate: date_1
                                                                                                                 }
-                                                                                                            );
+                                                                                                            ).on('changeDate', function(e){
+                                                                                                                $(this).datepicker('hide');
+                                                                                                            });
                                                                                                         });
+
                                                                                                 </script>
 
-                                                                                                <input type = "text" datepickersingle id = "datepicker_single" class="form-control" placeholder="Datum rezervacije" name="datepicker_single" data-ng-model="datepicker_single" required />
+                                                                                                <input type = "text" id = "datepicker_single" class="form-control" placeholder="Datum rezervacije" name="datepicker_single" data-ng-model="datepicker_single" required/>
                                                                                                 <i class="fa fa-calendar form-control-feedback"></i>
                                                                                             </div>
-                                                                                            
+                                                                                            <div class="alert alert-danger" data-ng-show="submitted && Peek.datepicker_single.$error.required">Datum rezervacije je potreban!</div>
                                                                                             <div class="row">
                                                                                                         <div class="col-sm-6">
                                                                                                             <h4>Od:</h4>
-                                                                                                            <select id="od_single" name="od_single" class="form-control">
+                                                                                                            <select id="od_single" class="form-control">
                                                                                                                 <option value="01">1h</option>
                                                                                                                 <option value="02">2h</option>
                                                                                                                 <option value="03">3h</option>
@@ -794,30 +768,31 @@
                                                                                                         </div>
                                                                                                         <div class="col-sm-6">
                                                                                                             <h4>Do:</h4>
-                                                                                                            <select id="dox_single" name="dox_single" class="form-control">
-                                                                                                                <option value="02" class="01">2h</option>
-                                                                                                                <option value="03" class="01 02">3h</option>
-                                                                                                                <option value="04" class="01 02 03">4h</option>
-                                                                                                                <option value="05" class="01 02 03 04">5h</option>
-                                                                                                                <option value="06" class="01 02 03 04 05">6h</option>
-                                                                                                                <option value="07" class="01 02 03 04 05 06">7h</option>
-                                                                                                                <option value="08" class="01 02 03 04 05 06 07">8h</option>
-                                                                                                                <option value="09" class="01 02 03 04 05 06 07 08">9h</option>
-                                                                                                                <option value="10" class="01 02 03 04 05 06 07 08 09">10h</option>
-                                                                                                                <option value="11" class="01 02 03 04 05 06 07 08 09 10">11h</option>
-                                                                                                                <option value="12" class="01 02 03 04 05 06 07 08 09 10 11">12h</option>
-                                                                                                                <option value="13" class="01 02 03 04 05 06 07 08 09 10 11 12">13h</option>
-                                                                                                                <option value="14" class="01 02 03 04 05 06 07 08 09 10 11 12 13">14h</option>
-                                                                                                                <option value="15" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14">15h</option>
-                                                                                                                <option value="16" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15">16h</option>
-                                                                                                                <option value="17" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16">17h</option>
-                                                                                                                <option value="18" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17">18h</option>
-                                                                                                                <option value="19" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18">19h</option>
-                                                                                                                <option value="20" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19">20h</option>
-                                                                                                                <option value="21" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20">21h</option>
-                                                                                                                <option value="22" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21">22h</option>
-                                                                                                                <option value="23" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22">23h</option>
-                                                                                                                <option value="00" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23">24h</option>
+                                                                                                            <select id="dox_single" class="form-control">
+                                                                                                                <option value="01">1h</option>
+                                                                                                                <option value="02">2h</option>
+                                                                                                                <option value="03">3h</option>
+                                                                                                                <option value="04">4h</option>
+                                                                                                                <option value="05">5h</option>
+                                                                                                                <option value="06">6h</option>
+                                                                                                                <option value="07">7h</option>
+                                                                                                                <option value="08">8h</option>
+                                                                                                                <option value="09">9h</option>
+                                                                                                                <option value="10">10h</option>
+                                                                                                                <option value="11">11h</option>
+                                                                                                                <option value="12">12h</option>
+                                                                                                                <option value="13">13h</option>
+                                                                                                                <option value="14">14h</option>
+                                                                                                                <option value="15">15h</option>
+                                                                                                                <option value="16">16h</option>
+                                                                                                                <option value="17">17h</option>
+                                                                                                                <option value="18">18h</option>
+                                                                                                                <option value="19">19h</option>
+                                                                                                                <option value="20">20h</option>
+                                                                                                                <option value="21">21h</option>
+                                                                                                                <option value="22">22h</option>
+                                                                                                                <option value="23">23h</option>
+                                                                                                                <option value="00">24h</option>
                                                                                                             </select>
                                                                                                         </div>
                                                                                                  </div>
@@ -827,8 +802,7 @@
                                                                                               <?php foreach($backend as $element) {?>
                                                                                                 <option value="<?php echo $element['id'];?>"><?php echo $element['naziv'];?></option><?php } ?>
                                                                                             </select>
-                                                                                                 <div class="alert alert-danger" data-ng-show="submitted_single && single.datepicker_single.$error.required">Datum rezervacije je potreban!</div>
-                                                                                                 <button type="button" class="btn btn-primary" data-ng-disabled="single.$invalid" data-ng-click="submit(single)">Rezerviraj</button>
+                                                                                            <button type="button" class="btn btn-primary" data-ng-click="submit(single)">Rezerviraj</button>
                                                                                          </form>
 
                                                                                     </div>
@@ -853,85 +827,28 @@
                                                                                                         $(document).ready(function () {
                                                                                                             $("#datepicker_rep").datepicker({
                                                                                                                     format: "dd/mm/yyyy",
-                                                                                                                    multidate: true,
                                                                                                                     clearBtn: true,
                                                                                                                     language: "hr",
-                                                                                                                    startDate: date_2
+                                                                                                                    startDate: date_2,
+                                                                                                                    multidate: true
                                                                                                                 }
-                                                                                                            );
+                                                                                                            ).on('changeDate', function(e){
+                                                                                                                $(this).datepicker('hide');
+                                                                                                            });
                                                                                                         });
 
                                                                                                 </script>
 
-                                                                                                <input type = "text" datepickerrep id = "datepicker_rep" class="form-control" placeholder="Selektivni dani rezervacije" name="datepicker_rep" data-ng-model="datepicker_rep" required/>
+                                                                                                <input type = "text" id = "datepicker_rep" class="form-control" placeholder="Selektivni dani rezervacije" name="datepicker_rep" data-ng-model="datepicker_rep" required/>
                                                                                                 <i class="fa fa-calendar form-control-feedback"></i>
                                                                                             </div>
-                                                                                            <div class="row">
-                                                                                                        <div class="col-sm-6">
-                                                                                                            <h4>Od:</h4>
-                                                                                                            <select id="od_rep" name="od_rep" class="form-control">
-                                                                                                                <option value="01">1h</option>
-                                                                                                                <option value="02">2h</option>
-                                                                                                                <option value="03">3h</option>
-                                                                                                                <option value="04">4h</option>
-                                                                                                                <option value="05">5h</option>
-                                                                                                                <option value="06">6h</option>
-                                                                                                                <option value="07">7h</option>
-                                                                                                                <option value="08">8h</option>
-                                                                                                                <option value="09">9h</option>
-                                                                                                                <option value="10">10h</option>
-                                                                                                                <option value="11">11h</option>
-                                                                                                                <option value="12">12h</option>
-                                                                                                                <option value="13">13h</option>
-                                                                                                                <option value="14">14h</option>
-                                                                                                                <option value="15">15h</option>
-                                                                                                                <option value="16">16h</option>
-                                                                                                                <option value="17">17h</option>
-                                                                                                                <option value="18">18h</option>
-                                                                                                                <option value="19">19h</option>
-                                                                                                                <option value="20">20h</option>
-                                                                                                                <option value="21">21h</option>
-                                                                                                                <option value="22">22h</option>
-                                                                                                                <option value="23">23h</option>
-                                                                                                                <option value="00">24h</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                        <div class="col-sm-6">
-                                                                                                            <h4>Do:</h4>
-                                                                                                            <select id="dox_rep" name="dox_rep" class="form-control">
-                                                                                                                <option value="02" class="01">2h</option>
-                                                                                                                <option value="03" class="01 02">3h</option>
-                                                                                                                <option value="04" class="01 02 03">4h</option>
-                                                                                                                <option value="05" class="01 02 03 04">5h</option>
-                                                                                                                <option value="06" class="01 02 03 04 05">6h</option>
-                                                                                                                <option value="07" class="01 02 03 04 05 06">7h</option>
-                                                                                                                <option value="08" class="01 02 03 04 05 06 07">8h</option>
-                                                                                                                <option value="09" class="01 02 03 04 05 06 07 08">9h</option>
-                                                                                                                <option value="10" class="01 02 03 04 05 06 07 08 09">10h</option>
-                                                                                                                <option value="11" class="01 02 03 04 05 06 07 08 09 10">11h</option>
-                                                                                                                <option value="12" class="01 02 03 04 05 06 07 08 09 10 11">12h</option>
-                                                                                                                <option value="13" class="01 02 03 04 05 06 07 08 09 10 11 12">13h</option>
-                                                                                                                <option value="14" class="01 02 03 04 05 06 07 08 09 10 11 12 13">14h</option>
-                                                                                                                <option value="15" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14">15h</option>
-                                                                                                                <option value="16" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15">16h</option>
-                                                                                                                <option value="17" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16">17h</option>
-                                                                                                                <option value="18" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17">18h</option>
-                                                                                                                <option value="19" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18">19h</option>
-                                                                                                                <option value="20" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19">20h</option>
-                                                                                                                <option value="21" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20">21h</option>
-                                                                                                                <option value="22" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21">22h</option>
-                                                                                                                <option value="23" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22">23h</option>
-                                                                                                                <option value="00" class="01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23">24h</option>
-                                                                                                            </select>
-                                                                                                        </div>
-                                                                                                 </div>
-                                                                                                <?php $backend = backendCall('getAllParkings', array());?><input name="" type="hidden" id="hidden_rep" value="<?php echo $UserId; ?>">
-                                                                                            <select id="parking_rep" class="form-control">
+                                                                                            <div class="alert alert-danger" data-ng-show="submitted && Peek.datepicker_rep.$error.required">Datumi rezervacije su potrebni!</div>
+                                                                                                <?php $backend = backendCall('getAllParkings', array());?><input name="" type="hidden" id="hidden_single" value="<?php echo $UserId; ?>">
+                                                                                            <select id="parking_single" class="form-control">
                                                                                               <?php foreach($backend as $element) {?>
                                                                                                 <option value="<?php echo $element['id'];?>"><?php echo $element['naziv'];?></option><?php } ?>
                                                                                             </select>
-                                                                                                <div class="alert alert-danger" data-ng-show="submitted_rep && rep.datepicker_rep.$error.required">Datumi rezervacije su potrebni!</div>
-                                                                                                <button type="button" class="btn btn-primary" data-ng-disabled="rep.$invalid" data-ng-click="submit(rep)">Rezerviraj</button>
+                                                                                                <button type="button" class="btn btn-primary" data-ng-click="submit(rep)">Rezerviraj</button>
                                                                                          </form>
                                                                                     </div>
                                                                             </div>
@@ -955,29 +872,30 @@
                                                                                                         $(document).ready(function () {
                                                                                                             $("#datepicker_perm").datepicker({
                                                                                                                     format: "dd/mm/yyyy",
-                                                                                                                    autoclose: true,
                                                                                                                     clearBtn: true,
                                                                                                                     language: "hr",
                                                                                                                     startDate: date_3
                                                                                                                 }
-                                                                                                            );
+                                                                                                            ).on('changeDate', function(e){
+                                                                                                                $(this).datepicker('hide');
+                                                                                                            });
                                                                                                         });
 
                                                                                                 </script>
 
-                                                                                                <input type = "text" datepickerperm id = "datepicker_perm" class="form-control" placeholder="Od kojeg datuma želite rezervirati" name="datepicker_perm" data-ng-model="datepicker_perm" required />
+                                                                                                <input type = "text" id = "datepicker_perm" class="form-control" placeholder="Od kojeg datuma želite rezervirati" name="datepicker_perm" data-ng-model="datepicker_perm" />
                                                                                                 
                                                                                                 <i class="fa fa-calendar form-control-feedback"></i>
                                                                                                  
                                                                                             </div>
-                                                                                                
-                                                                                                <?php $backend = backendCall('getAllParkings', array());?><input name="" type="hidden" id="hidden_perm" value="<?php echo $UserId; ?>">
-                                                                                            <select id="parking_perm" class="form-control">
+                                                                                                <div class="alert alert-danger" data-ng-show="submitted && Peek.datepicker_perm.$error.required">Prvi dan rezervacije je potreban!</div>
+                                                                                                <?php $backend = backendCall('getAllParkings', array());?><input name="" type="hidden" id="hidden_single" value="<?php echo $UserId; ?>">
+                                                                                            <select id="parking_single" class="form-control">
                                                                                               <?php foreach($backend as $element) {?>
                                                                                                 <option value="<?php echo $element['id'];?>"><?php echo $element['naziv'];?></option><?php } ?>
                                                                                             </select>
-                                                                                            <div class="alert alert-danger" data-ng-show="submitted_perm && perm.datepicker_perm.$error.required">Prvi dan rezervacije je potreban!</div>    
-                                                                                            <button type="button" class="btn btn-primary" data-ng-disabled="perm.$invalid" data-ng-click="submit(perm)">Rezerviraj</button>
+                                                                                                
+                                                                                            <button type="button" class="btn btn-primary" data-ng-click="submit(perm)">Rezerviraj</button>
                                                                                          </form>
                                                                                     </div>
                                                                             </div>

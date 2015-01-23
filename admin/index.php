@@ -28,6 +28,9 @@ session_start();
 	
 	<!-- start: CSS -->
 	<link id="bootstrap-style" href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.css" rel="stylesheet">
+        <!-- Latest compiled and minified CSS -->
+        <link href="css/bootstrap.css" rel="stylesheet">
 	<link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 	<link id="base-style" href="css/style.css" rel="stylesheet">
 	<link id="base-style-responsive" href="css/style-responsive.css" rel="stylesheet">
@@ -55,174 +58,6 @@ session_start();
 </head>
 
 <body>
-
-<!-- MODALI -->
-<div class="modal fade" id="add_parking" tabindex="-1" role="dialog" aria-labelledby="add_parking-label" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				
-				<h4 class="modal-title" id="myModal-label">Dodaj parkiralište</h4>
-			</div>
-			<div class="modal-body">
-				
-                <form action="actions/add_parking.php" id="app_parking_form" method="post">
-                	<input name="name" class="form-control" type="text" placeholder="Ime">
-                    <input name="address" class="form-control" type="text"  placeholder="Adresa">
-                    <input name="latitude" class="form-control" type="text"  placeholder="Zemljopisna širina">
-                    <input name="longitude" class="form-control" type="text"  placeholder="Zemljopisna dužina">
-                    <input name="spots" class="form-control" type="text"  placeholder="Broj mjesta">
-                    
-                    <?php 
-					
-						$backend = backendCall('getParkingTypes', array());
-						
-					
-					?>
-                    
-                    <select name="type" class="form-control">
-                    	<?php foreach($backend as $element) { ?>
-                    
-                      <option value="<?php echo $element['id'] ?>"><?php echo $element['name'] ?></option>
-                      <?php } ?>
-                    </select>
-                    <input name="price" class="form-control" type="text"  placeholder="Cijena">
-                </form>
-                
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Odustani</button>
-				<button type="button" class="btn btn-primary" onClick="$('#app_parking_form').submit();">Dodaj</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<div class="modal fade" id="parking_list" tabindex="-1" role="dialog" aria-labelledby="parking_list-label" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModal-label">Uredi parkiralište</h4>
-			</div>
-			<div class="modal-body">
-				
-                <div class="">
-                       		<table class="table bootstrap-datatable datatable dataTable" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" border="0">
-						  <tr class="table_legend">
-                          <td class=" sorting_1">Naziv</td>
-								<td class="center ">Akcija</td>
-								
-                          </tr>
-						  
-					  <tbody role="alert" aria-live="polite" aria-relevant="all">
-                      
-                       <?php 
-					
-						$backend = backendCall('getAllParkings', array());
-						
-						
-						foreach($backend as $element)
-						{
-					?>
-                      <tr class="even" style="border: none important;">
-								<td class=" sorting_1"><?php echo $element['naziv']; ?></td>
-								<td class="center "><span data-edit="<?php echo $element['id']; ?>" onClick="window.location = 'index.php?parking=<?php echo $element['id']; ?>'" class="label label-success" style="cursor: pointer;">Uredi</span></td>
-	
-							</tr>
-                            
-                           <?php } ?>
-                            
-                            
-                            </tbody></table>
-                       </div>
-                
-                
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<div class="modal fade" id="edit_clients" tabindex="-1" role="dialog" aria-labelledby="edit_clients-label" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModal-label">Uredit klijente</h4>
-			</div>
-			<div class="modal-body">
-				
-                
-                <table class="table bootstrap-datatable datatable dataTable" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" border="0">
-						  <tr class="table_legend">
-                          <td class=" sorting_1">Ime i prezime</td>
-								<td class="center ">Akcija</td>
-                          </tr>
-						  
-					  <tbody role="alert" aria-live="polite" aria-relevant="all">
-                      
-                       <?php 
-					
-						$backend = backendCall('getAllUsers', array());
-						
-						
-						foreach($backend as $element)
-						{
-					?>
-                      <tr class="even" style="border: none important;">
-								<td class=" sorting_1"><?php echo $element['ime']." ".$element['prezime'];?></td>
-								<td class="center "><span data-edit="<?php echo $element['id']; ?>" onClick="window.location = 'index.php?user=<?php echo $element['id']; ?>'" class="label label-success" style="cursor: pointer;">Uredi</span></td>
-
-	
-							</tr>
-                            <?php } ?>
-                            
-                            </tbody></table>
-                
-                
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<div class="modal fade" id="edit_discount" tabindex="-1" role="dialog" aria-labelledby="edit_discount-label" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="myModal-label">Promjeni popust</h4>
-			</div>
-			<div class="modal-body">
-				
-                
-                 <form action="actions/edit_discount.php" id="discount_form" method="post">
-                 Postotak popusta za prijavljene korisnike<br>
-                 
-                 <?php
-                 	$backend = backendCall('getDiscount', array());
-				 ?>
-                 
-                	<input name="percent" class="form-control" type="text" placeholder="Ime" value="<?php echo $backend['iznos']; ?>">
-                    </form>
-                
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
-				<button type="button" class="btn btn-primary" onclick="$('#discount_form').submit();">Spremi</button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- END MODALI -->
 
 
 		<!-- start: Header -->
@@ -508,6 +343,177 @@ Broj kreditne kartice<br>
 
 	</footer>
 	
+        <!-- MODALI -->
+<div class="modal fade" id="add_parking" tabindex="-1" role="dialog" aria-labelledby="myLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				
+				<h4 class="modal-title" id="myModal-label1">Dodaj parkiralište</h4>
+			</div>
+			<div class="modal-body">
+				
+                <form action="actions/add_parking.php" id="app_parking_form" method="post">
+                	<input name="name" class="form-control" type="text" placeholder="Ime">
+                    <input name="address" class="form-control" type="text"  placeholder="Adresa">
+                    <input name="latitude" class="form-control" type="text"  placeholder="Zemljopisna širina">
+                    <input name="longitude" class="form-control" type="text"  placeholder="Zemljopisna dužina">
+                    <input name="spots" class="form-control" type="text"  placeholder="Broj mjesta">
+                    
+                    <?php 
+					
+						$backend = backendCall('getParkingTypes', array());
+						
+					
+					?>
+                    
+                    <select name="type" class="form-control">
+                    	<?php foreach($backend as $element) { ?>
+                    
+                      <option value="<?php echo $element['id'] ?>"><?php echo $element['name'] ?></option>
+                      <?php } ?>
+                    </select>
+                    <input name="price" class="form-control" type="text"  placeholder="Cijena">
+                </form>
+                
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Odustani</button>
+				<button type="button" class="btn btn-primary" onClick="$('#app_parking_form').submit();">Dodaj</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="parking_list" tabindex="-1" role="dialog" aria-labelledby="myLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModal-label">Uredi parkiralište</h4>
+			</div>
+			<div class="modal-body">
+				
+                <div class="">
+                       		<table class="table bootstrap-datatable datatable dataTable" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" border="0">
+						  <tr class="table_legend">
+                          <td class=" sorting_1">Naziv</td>
+								<td class="center ">Akcija</td>
+								
+                          </tr>
+						  
+					  <tbody role="alert" aria-live="polite" aria-relevant="all">
+                      
+                       <?php 
+					
+						$backend = backendCall('getAllParkings', array());
+						
+						
+						foreach($backend as $element)
+						{
+					?>
+                      <tr class="even" style="border: none important;">
+								<td class=" sorting_1"><?php echo $element['naziv']; ?></td>
+								<td class="center "><span data-edit="<?php echo $element['id']; ?>" onClick="window.location = 'index.php?parking=<?php echo $element['id']; ?>'" class="label label-success" style="cursor: pointer;">Uredi</span></td>
+	
+							</tr>
+                            
+                           <?php } ?>
+                            
+                            
+                            </tbody></table>
+                       </div>
+                
+                
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="edit_clients" tabindex="-1" role="dialog" aria-labelledby="myLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModal-label">Uredit klijente</h4>
+			</div>
+			<div class="modal-body">
+				
+                
+                <table class="table bootstrap-datatable datatable dataTable" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" border="0">
+						  <tr class="table_legend">
+                          <td class=" sorting_1">Ime i prezime</td>
+								<td class="center ">Akcija</td>
+                          </tr>
+						  
+					  <tbody role="alert" aria-live="polite" aria-relevant="all">
+                      
+                       <?php 
+					
+						$backend = backendCall('getAllUsers', array());
+						
+						
+						foreach($backend as $element)
+						{
+					?>
+                      <tr class="even" style="border: none important;">
+								<td class=" sorting_1"><?php echo $element['ime']." ".$element['prezime'];?></td>
+								<td class="center "><span data-edit="<?php echo $element['id']; ?>" onClick="window.location = 'index.php?user=<?php echo $element['id']; ?>'" class="label label-success" style="cursor: pointer;">Uredi</span></td>
+
+	
+							</tr>
+                            <?php } ?>
+                            
+                            </tbody></table>
+                
+                
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="edit_discount" tabindex="-1" role="dialog" aria-labelledby="myLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModal-label">Promjeni popust</h4>
+			</div>
+			<div class="modal-body">
+				
+                
+                 <form action="actions/edit_discount.php" id="discount_form" method="post">
+                 Postotak popusta za prijavljene korisnike<br>
+                 
+                 <?php
+                 	$backend = backendCall('getDiscount', array());
+				 ?>
+                 
+                	<input name="percent" class="form-control" type="text" placeholder="Ime" value="<?php echo $backend['iznos']; ?>">
+                    </form>
+                
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+				<button type="button" class="btn btn-primary" onclick="$('#discount_form').submit();">Spremi</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END MODALI -->
+
+
+        
+        
 	<!-- start: JavaScript-->
 
 		<script src="js/jquery-1.9.1.min.js"></script>

@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: application/javascript');
 error_reporting(0);
 
 $callback = $_GET['callback'];

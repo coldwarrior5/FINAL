@@ -246,7 +246,7 @@ class Prijavljenikorisnik{
 				$model->created_at = $element['created_at'];
 				$model->updated_at = $element['updated_at'];
 				
-								$model->idRegistriraniKorisnik = $element['idRegistriraniKorisnik'];
+						$model->idRegistriraniKorisnik = $element['idRegistriraniKorisnik'];
                 				$model->oib = $element['oib'];
                 				$model->datumRodenja = $element['datumRodenja'];
                 				$model->adresa = $element['adresa'];

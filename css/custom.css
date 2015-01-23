@@ -22,3 +22,6 @@ File Description: Place here your custom CSS styles
   display: -ms-flexbox;
   display:         flex;
 }
+.modal {
+    overflow-y:auto;
+}

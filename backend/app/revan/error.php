@@ -130,7 +130,11 @@ class DatabaseError
 	{
 		return "-20";	
 	}
-		
+	
+        static function usernameTaken()
+	{
+		return "-24";	
+	}
 }
 
 class CommonError

@@ -15,7 +15,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	
 	<!-- start: Meta -->
 	<meta charset="utf-8">
 	<title>KORISNIK - Parking Garaža</title>
@@ -193,6 +192,46 @@ Broj kreditne kartice<br>
 	</div>
 </div>
 
+<div class="modal fade" id="change_all" tabindex="-1" role="dialog" aria-labelledby="change_all-label" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title" id="myModal-label">Sve rezervacije</h4>
+			</div>
+			<div class="modal-body">
+				
+                <table class="table bootstrap-datatable datatable dataTable" id="DataTables_Table_1" aria-describedby="DataTables_Table_0_info" border="0">
+						  <tr class="table_legend">
+                          <td class=" sorting_1">Naziv</td>
+								<td class="center ">Akcija</td>
+                          </tr>
+						  
+					  <tbody role="alert" aria-live="polite" aria-relevant="all">
+                      
+                       <?php 
+					
+						$backend = backendCall('getReservations', array('id' => $id));
+						
+						foreach($backend as $element)
+						{
+					?>
+                      <tr class="even" style="border: none important;">
+								<td class="center "><?php echo $element['idParkiralista'];?></td>
+								<td class="center "><span onClick="window.location = 'delete_subscription.php?id=<?php echo $element['id']; ?>'" class="label label-important" style="cursor: pointer;">Obriši</span></td>
+	
+							</tr>
+                            <?php } ?>
+                            
+                            </tbody></table>
+                
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- END MODALI -->
 
 
@@ -220,6 +259,7 @@ Broj kreditne kartice<br>
 								<li class="dropdown-menu-title">
  									<span>Postavke</span>
 								</li>
+                                                                <li><a href="../index.php"><i class="halflings-icon home"></i> Povratak</a></li>
 								<li><a href="logout.php"><i class="halflings-icon off"></i> Odjava</a></li>
 							</ul>
 						</li>
@@ -244,6 +284,7 @@ Broj kreditne kartice<br>
 						<li><a href="#" data-toggle="modal" data-target="#change_info"><i class="icon-edit"></i><span class="hidden-tablet"> Promijeni informacije</span></a></li>
 						<li><a href="#" data-toggle="modal" data-target="#change_password"><i class="icon-edit"></i><span class="hidden-tablet"> Promijeni lozinku/korisničko ime</span></a></li>
                         <li><a href="#" data-toggle="modal" data-target="#change_subs"><i class="icon-calendar"></i><span class="hidden-tablet"> Trajne rezervacije</span></a></li>
+                         <li><a href="#" data-toggle="modal" data-target="#change_all"><i class="icon-calendar"></i><span class="hidden-tablet"> Sve rezervacije</span></a></li>
 						
 					</ul>
 				</div>
@@ -264,7 +305,7 @@ Broj kreditne kartice<br>
 			<ul class="breadcrumb">
 				<li>
 					<i class="icon-home"></i>
-					<a href="index.php">Početna</a> 
+					<a href="user.php">Početna</a> 
 					<i class="icon-angle-right"></i>
                  
 				</li>
@@ -297,7 +338,7 @@ Broj kreditne kartice<br>
 
 						OIB: <?php echo $backend['oib'];?><br><br>
                         <?php echo $backend['adresa'];?><br><br>
-                        Datum rođenja: <?php echo $backend['datumRodenja'];?><br><br>
+                        Datum rođenja: <?php echo substr($backend['datumRodenja'],0,10); ?><br><br>
                         <?php echo $backend['email'];?><br><br>
                         <?php echo $backend['telefon'];?><br><br>
                         Broj kartice: <?php echo $backend['brojKartice'];?><br><br>
